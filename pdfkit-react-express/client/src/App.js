@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
 
@@ -6,7 +5,9 @@ function App() {
   const generatePdf = async (event) => {
     event.preventDefault();
 
-    const response = await axios.get("http://localhost:5000/pdf");
+    const response = await axios.get("http://localhost:5000/pdf", {
+      responseType: "blob",
+    });
 
     const file = new File([response.data], "test.pdf", {
       type: "application/pdf",

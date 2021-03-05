@@ -1,5 +1,4 @@
 const express = require("express");
-const axios = require("axios");
 const cors = require("cors");
 
 const app = express();
@@ -19,6 +18,12 @@ app.get("/pdf", async (req, res) => {
 
     // Create a document
     const doc = new PDFDocument();
+
+    res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Access-Control-Allow-Origin": "*",
+      "Content-Disposition": "attachment; filename=test.pdf",
+    });
 
     // Pipe its output somewhere, like to a file or HTTP response
     // See below for browser usage
