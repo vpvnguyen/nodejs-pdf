@@ -1,19 +1,7 @@
-const express = require("express");
-const cors = require("cors");
+const PDFDocument = require("pdfkit");
 
-const app = express();
-
-const PORT = 5000;
-
-app.use(cors());
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("API SERVER RUNNING");
-});
-
-app.get("/get-pdf", async (req, res) => {
-  try {
+class PdfController {
+  static getPdf = (res) => {
     // Create a document
     const doc = new PDFDocument();
 
@@ -35,13 +23,9 @@ app.get("/get-pdf", async (req, res) => {
 
     // Finalize PDF file
     doc.end();
-  } catch (error) {
-    console.error(error);
-  }
-});
+  };
 
-app.post("/create-pdf", async (req, res) => {
-  try {
+  static createPdf = (text, res) => {
     // Create a document
     const doc = new PDFDocument();
 
@@ -56,16 +40,11 @@ app.post("/create-pdf", async (req, res) => {
     doc.pipe(res);
 
     // Embed a font, set the font size, and render some text
-    doc
-      .font("Times-Roman")
-      .fontSize(25)
-      .text("Some text with an embedded font!", 100, 100);
+    doc.font("Times-Roman").fontSize(25).text(text, 100, 100);
 
     // Finalize PDF file
     doc.end();
-  } catch (error) {
-    console.error(error);
-  }
-});
+  };
+}
 
-app.listen(PORT, () => console.log(`API running on ${PORT}`));
+module.exports = PdfController;
