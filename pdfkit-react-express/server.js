@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const PdfController = require("./controllers/Pdf.controller");
 
 const app = express();
 
@@ -14,27 +15,7 @@ app.get("/", (req, res) => {
 
 app.get("/get-pdf", async (req, res) => {
   try {
-    // Create a document
-    const doc = new PDFDocument();
-
-    res.writeHead(200, {
-      "Content-Type": "application/pdf",
-      "Access-Control-Allow-Origin": "*",
-      "Content-Disposition": "attachment; filename=test.pdf",
-    });
-
-    // Pipe its output somewhere, like to a file or HTTP response
-    // See below for browser usage
-    doc.pipe(res);
-
-    // Embed a font, set the font size, and render some text
-    doc
-      .font("Times-Roman")
-      .fontSize(25)
-      .text("Some text with an embedded font!", 100, 100);
-
-    // Finalize PDF file
-    doc.end();
+    PdfController.getPdf(res);
   } catch (error) {
     console.error(error);
   }
@@ -42,27 +23,17 @@ app.get("/get-pdf", async (req, res) => {
 
 app.post("/create-pdf", async (req, res) => {
   try {
-    // Create a document
-    const doc = new PDFDocument();
+    const text = req.body;
+    PdfController.createPdf(text, res);
+  } catch (error) {
+    console.error(error);
+  }
+});
 
-    res.writeHead(200, {
-      "Content-Type": "application/pdf",
-      "Access-Control-Allow-Origin": "*",
-      "Content-Disposition": "attachment; filename=test.pdf",
-    });
-
-    // Pipe its output somewhere, like to a file or HTTP response
-    // See below for browser usage
-    doc.pipe(res);
-
-    // Embed a font, set the font size, and render some text
-    doc
-      .font("Times-Roman")
-      .fontSize(25)
-      .text("Some text with an embedded font!", 100, 100);
-
-    // Finalize PDF file
-    doc.end();
+app.post("/store-pdf", (req, res) => {
+  try {
+    const text = req.body;
+    PdfController.storePdf(text, res);
   } catch (error) {
     console.error(error);
   }
