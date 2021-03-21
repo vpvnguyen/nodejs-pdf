@@ -1,5 +1,5 @@
 const PDFDocument = require("pdfkit");
-
+const fs = require("fs");
 class PdfController {
   static getPdf = (res) => {
     // Create a document
@@ -46,19 +46,22 @@ class PdfController {
     doc.end();
   };
 
-  static storePdf = (text, res) => {
+  static storePdf = (text) => {
     // Create a document
     const doc = new PDFDocument();
 
+    const pdfOutputDirectory = "./pdf-output";
+
+    if (!fs.existsSync(pdfOutputDirectory)) fs.mkdirSync(pdfOutputDirectory);
+
     // Pipe its output somewhere, like to a file or HTTP response
     // See below for browser usage
-    doc.pipe(fs.createWriteStream(`output-${new Date()}.pdf`));
+    doc.pipe(
+      fs.createWriteStream(`${pdfOutputDirectory}/output-${new Date()}.pdf`)
+    );
 
     // Embed a font, set the font size, and render some text
-    doc
-      .font("Times-Roman")
-      .fontSize(25)
-      .text("Some text with an embedded font!", 100, 100);
+    doc.font("Times-Roman").fontSize(25).text(text, 100, 100);
 
     // Finalize PDF file
     doc.end();
