@@ -1,46 +1,65 @@
 import "./App.css";
 import axios from "axios";
+import { useState } from "react";
 
 function App() {
+  const [message, setMessage] = useState(null);
+
   const getPdf = async (event) => {
     console.log("getPdf");
-
     event.preventDefault();
 
-    const response = await axios.get("http://localhost:5000/get-pdf");
+    try {
+      const response = await axios.get("http://localhost:5000/get-pdf");
 
-    const file = new File([response.data], "test.pdf", {
-      type: "application/pdf",
-    });
+      const file = new File([response.data], "test.pdf", {
+        type: "application/pdf",
+      });
 
-    console.log(file);
+      console.log(file);
+      setMessage("Got PDF!");
+    } catch (error) {
+      console.error(error);
+      setMessage("Issue getting PDF");
+    }
   };
 
   const createPdf = async (event) => {
     console.log("createPdf");
-
     event.preventDefault();
 
-    const response = await axios.post("http://localhost:5000/create-pdf", {
-      responseType: "blob",
-    });
-    const file = new File([response.data], "test.pdf", {
-      type: "application/pdf",
-    });
-    console.log(file);
+    try {
+      const response = await axios.post("http://localhost:5000/create-pdf", {
+        responseType: "blob",
+      });
+
+      const file = new File([response.data], "test.pdf", {
+        type: "application/pdf",
+      });
+
+      console.log(file);
+      setMessage("Created PDF!");
+    } catch (error) {
+      console.error(error);
+      setMessage("Issue creating PDF");
+    }
   };
 
   const storePdf = async (event) => {
     console.log("storePdf");
-
     event.preventDefault();
 
-    const response = await axios.post(
-      "http://localhost:5000/store-pdf",
-      "store pdf text"
-    );
+    try {
+      const response = await axios.post("http://localhost:5000/store-pdf", {
+        text: "store pdf text",
+      });
 
-    console.log(response);
+      console.log(response);
+      setMessage("Stored PDF!");
+    } catch (error) {
+      console.error(error);
+      setMessage("Issue storing PDF");
+    }
   };
 
   return (
@@ -49,6 +68,8 @@ function App() {
         <button onClick={getPdf}>Get PDF</button>
         <button onClick={createPdf}>Create PDF</button>
         <button onClick={storePdf}>Store PDF</button>
+
+        {message && <p>{message}</p>}
       </header>
     </div>
   );
