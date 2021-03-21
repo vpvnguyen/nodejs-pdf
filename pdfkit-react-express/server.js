@@ -32,8 +32,9 @@ app.post("/create-pdf", async (req, res) => {
 
 app.post("/store-pdf", (req, res) => {
   try {
-    const text = req.body;
-    PdfController.storePdf(text, res);
+    const { text } = req.body;
+    PdfController.storePdf(text);
+    res.status(200).json({ message: "stored pdf!" });
   } catch (error) {
     console.error(error);
   }
