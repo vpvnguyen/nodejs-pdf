@@ -14,7 +14,7 @@ function App() {
     try {
       const response = await axios.get(`${LOCAL_SERVER_URL}/get-pdf`);
 
-      const file = new File([response.data], "test.pdf", {
+      const file = new File([response.data], "getPdf.pdf", {
         type: "application/pdf",
       });
 
