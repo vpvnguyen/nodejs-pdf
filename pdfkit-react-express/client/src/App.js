@@ -2,6 +2,8 @@ import "./App.css";
 import axios from "axios";
 import { useState } from "react";
 
+const LOCAL_SERVER_URL = "http://localhost:5000";
+
 function App() {
   const [message, setMessage] = useState(null);
 
@@ -10,7 +12,7 @@ function App() {
     event.preventDefault();
 
     try {
-      const response = await axios.get("http://localhost:5000/get-pdf");
+      const response = await axios.get(`${LOCAL_SERVER_URL}/get-pdf`);
 
       const file = new File([response.data], "test.pdf", {
         type: "application/pdf",
@@ -29,11 +31,11 @@ function App() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/create-pdf", {
+      const response = await axios.post(`${LOCAL_SERVER_URL}/create-pdf`, {
         responseType: "blob",
       });
 
-      const file = new File([response.data], "test.pdf", {
+      const file = new File([response.data], "createPdf.pdf", {
         type: "application/pdf",
       });
 
@@ -50,7 +52,7 @@ function App() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/store-pdf", {
+      const response = await axios.post(`${LOCAL_SERVER_URL}/store-pdf`, {
         text: "store pdf text",
       });
 
